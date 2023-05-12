@@ -6,9 +6,9 @@ For my project, I have decided to create an Uno game. This project will be compl
 
 - Ability to play against another human
 - Deck of cards
+- Each player must start with 7 cards at the beginning of a round.
 - Ability to keep track of whether cards have been discarded
 - Number of cards in hand, discard, and unplayed cards must be tracked
-- Cards in hand must always be 7
 - Wild cards functional and work as expected
 - Accessible with screen readers
 - must only be able to play cards with the same number or color
@@ -26,7 +26,7 @@ For my project, I have decided to create an Uno game. This project will be compl
 - ability to have more than two players, either bot or human
 - keeping track of high scores
 - multiple rounds and score tracking
-- online play (Very far into the future)
+- online play (Very far into the future, like after this class. Something to work on though.)
 
 ## Has this been done before?
 
