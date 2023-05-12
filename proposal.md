@@ -1,6 +1,6 @@
 # CS30 Final Project Proposal
 
-For my project, I have decided to create an Uno game. This project will be completed individually.
+For my project, I have decided to create an Uno game. It will be completely accessible to both blind and sighted players alike, since it will be composed of HTML elements and have a partial, if not a full UI. This project will be completed individually.
 
 ## Must-have features
 
