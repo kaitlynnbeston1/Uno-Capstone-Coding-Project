@@ -1,0 +1,108 @@
+Capstone Coding Project Pseudo-code
+
+Classes needed
+
+
+Card class:
+	Will need color (Red, green, blue, yellow), value (Number, draw 2, wild, wild draw 4, skip), and points value.
+
+
+Will most likely need a deck class.
+
+
+Piles will need to be represented as well. EX: discard pile, draw card, and hand would all be subclasses since they are groups of cards. 
+
+
+Player class will handle things such as drawing cards and keeping score. Will also need Boolean value to track whether a player has Uno. I also think they will need to have player numbers to dictate who’s turn is when.
+
+
+Variables
+Turn_number = 0
+
+
+Functions
+I am not quite sure where each function will go, but as of now thinking all card and score stuff will go in the player class.
+
+
+Player
+
+
+Draw_card():
+	Take card from deck class
+	Card gets moved into player’s hand.
+Can only draw once. Turn skipped after if no playable cards.
+
+
+Play_card(card):
+	If card is playable:
+		Move card from hand to discard pile when user selects said card.
+	else:
+		Tell user they have no playable cards.
+		Wait for them to draw a card
+		if playable card is drawn:
+			Wait for user to play card
+			User plays card and next person’s turn.
+		else:
+			Move to next person’s turn.
+
+
+Say_uno():
+	if there is one card in the deck:
+		Print a message saying that the player said Uno
+	else:
+Tell the player that they cannot say Uno right now and they must wait until they have one card.
+
+
+Catch_uno():
+	Look at the hands of players
+	if player other than one playing has Uno:
+		Say that player X caught player y for not saying Uno.
+	else:
+		Say that no one has Uno.
+
+
+Full_uno():
+	if player has Uno:
+		Say_uno()
+	else:
+		catch_uno()
+
+
+draw_two():
+	[player.draw_card() for card in range(0, 3]
+
+
+Draw_four():
+	[player.draw_card for card in range[0, 5)]
+
+
+
+Deck
+
+
+Refresh_draw():
+	if draw pile is empty:
+Cards from discard move over to draw
+	else:
+		Put in error message for myself. That shouldn’t happen.
+
+
+Change_color():
+	Ask user for color
+	Top card becomes “wild as {color}”
+
+
+Misc
+
+
+Whos_turn():
+	If turn number matches player number:
+		That player takes their turn.
+	IF number is greater than the max number of players:
+		Turn number gets set to 0.
+
+
+Take_turn():
+	If it is your turn:
+	Ask user for which card they would like to draw
+	Your_name.play_card(chosen card)
