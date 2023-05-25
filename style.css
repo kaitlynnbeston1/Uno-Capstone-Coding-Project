@@ -1,0 +1,31 @@
+* {
+    font-family: verdana;
+    /*Verdana is one of the easiest fonts for low vision users to see. */
+    /*Using white text on black background so that it is easier to see. */
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+.menus {
+    margin: 10px;
+    padding: 10px;
+}
+
+.menus a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+    width: 275px;
+    line-height: 43px;
+    margin: auto;
+    margin-bottom: 10m;
+    margin-bottom: 10m;
+    border-style: solid;
+    border-width: 5px;
+    border-color: mediumblue;
+    /* Makes white stand out a bit more.*/
+    font-size: 55px;
+
+}

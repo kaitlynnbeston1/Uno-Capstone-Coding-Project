@@ -1,0 +1,57 @@
+* {
+    background-color: black;
+}
+
+
+body {
+    color: white;
+    text-align: center;
+}
+
+
+#hand {
+    display: flex;
+    width: 100%;
+    height: 50%;
+}
+
+#hand button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    width: 85px;
+    height: 100px;
+    border-style: solid;
+    border-color: white;
+}
+
+.red {
+    background-color: red;
+    font-weight: 900;
+    color: white;
+}
+
+.blue {
+    background-color: blue;
+    font-weight: 900;
+    color: white;
+}
+
+.green {
+    background-color: forestgreen;
+    font-weight: 900;
+    color: white;
+}
+
+.yellow {
+    background-color: gold;
+    font-weight: 900;
+    color: black;
+}
+
+.black {
+    background-color: black;
+    font-weight: 900;
+    color: white;
+}
