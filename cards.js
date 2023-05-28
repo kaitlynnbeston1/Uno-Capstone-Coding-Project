@@ -1,9 +1,10 @@
 var colors = ["red", "green", "blue", "yellow"]; //All colors for Uno deck.
 var values = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "skip", "reverse", "draw2"]; // All numerical card values.
 var wilds = ["wild", "draw4"] // Wild card variables for the deck.
+var hand = []
 
 
-function create_deck() {
+function createDeck() {
     // Creating a deck of cards.
     let deck = new Array();
     for (let item = 0; item < colors.length; item++) {
@@ -12,11 +13,11 @@ function create_deck() {
             deck.push(card);
         } // End loop 2.
     } // End loop 1.
-    for (let w = 0; w <= 4; w++) {
+    for (let w = 0; w < 4; w++) {
         let card = { color: "black", value: wilds[0] }
         deck.push(card)
     } //End for loop 1
-    for (let w = 0; w <= 4; w++) {
+    for (let w = 0; w < 4; w++) {
         let card = { color: "black", value: wilds[1] }
         deck.push(card)
     }
@@ -34,10 +35,22 @@ function shuffle(deck) {
     } // End for loop 1.
 } // End function.
 
-function render(deck) {
-    // For testing, displays deck.
+function getCard(fromDeck) {
+    // Deals one card.
+    return fromDeck.pop();
+} // End function.
+
+function drawCards(d, h, n) {
+    for (let draw = 0; draw < n; draw++) {
+        card = getCard(d);
+        h.push(card)
+    } // End for loop.
+} // End function.
+
+function render(deck, where) {
+    // Shows cards of choice.
     for (let c = 0; c < deck.length; c++) {
-        let h = document.getElementById("hand");
+
         let cd = document.createElement("button");
         // Making the buttons look more Uno-ish for sighted players.
         if (deck[c].value === "skip") {
@@ -60,13 +73,23 @@ function render(deck) {
         } //end else.
         cd.setAttribute("class", deck[c].color);
         cd.ariaLabel = deck[c].color + " " + deck[c].value
-        document.getElementById("hand").appendChild(cd);
+        document.getElementById(where).appendChild(cd);
 
     } //End for loop
 } // End function
 
 
+// Creating the deck and draw card button.
+d1 = createDeck();
+let drawDiv = document.getElementById("draw-div");
+let dbt = document.createElement("button");
+dbt.innerText = "+";
+dbt.ariaLabel = "Draw card";
+dbt.setAttribute("id", "draw-btn")
+drawDiv.appendChild(dbt)
 
-d1 = create_deck()
-shuffle(d1)
-render(d1)
+// Playing the game.
+shuffle(d1);
+drawCards(d1, hand, 7);
+render(hand, "hand-el");
+

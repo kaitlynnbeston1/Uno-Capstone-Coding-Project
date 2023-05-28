@@ -13,3 +13,7 @@
 - *Added:* Cards shuffle.
 - *Added:* Cards can be rendered on the screen.
 - *Added:* Cards are styled to look like Uno cards, including symbols.
+
+## v2.0
+- *Added:* You now get a hand, rather than just seeing all cards.
+- *Added:* Placeholder draw card button. Function to be added.
