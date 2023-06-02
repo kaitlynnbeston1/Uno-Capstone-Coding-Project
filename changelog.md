@@ -17,3 +17,9 @@
 ## v2.0
 - *Added:* You now get a hand, rather than just seeing all cards.
 - *Added:* Placeholder draw card button. Function to be added.
+
+## v3.0
+*Changed:* The draw button works now! Yay!
+*Changed:* The cards are now a bit more high contrast for low vision users.
+*Added:* You can now see the top card of the discard pile and read it with a screen reader.
+*Added:* You can now place cards!
