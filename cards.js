@@ -1,21 +1,27 @@
-var rendering = true
+
 var colors = ["red", "green", "blue", "yellow"]; //All colors for Uno deck.
 var values = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "skip", "reverse", "draw2"]; // All numerical card values.
 var wilds = ["wild", "draw4"] // Wild card variables for the deck.
 var turn = 0
 var players = []
 var move = 1
-var renderedHand = []
 var discard = []
 
 
 class Player {
     constructor(name, turnNum) {
         this.name = name;
-        this.turnNum = turnNum
+        this.turnNum = turnNum;
         this.hand = [];
+        this.rendered = [];
     } // End constructor
+
+    removeCard(index) {
+        //remove and return a card from hand
+        return this.hand.splice(index, 1);
+    }
 } // End class.
+
 
 function setPlayers() {
     // Creates classes with players.
@@ -43,8 +49,30 @@ function setPlayers() {
 } // End function.
 
 
-function incrementTurn() {
+function clearRender(player) {
+    // Clears the render for the next players turn.
+    for (let card = 0; card < player.rendered.length; card++) {
+        player.rendered[card].remove();
+    } // End for loop.
+    player.rendered = []
+}
+
+
+function renderHeader() {
+    // Renders header to say whose turn it is.
+    let headerEl = document.getElementById("header-el");
+    let headerInfo = document.getElementById("header-info");
+    headerEl.removeChild(headerInfo);
+    let newHeader = document.createElement("h1");
+    newHeader.innerText = players[turn].name + "'s turn.";
+    newHeader.setAttribute("id", "header-info")
+    headerEl.appendChild(newHeader);
+} // End function
+
+
+function switchTurn() {
     // Increments turn number. Used to manage whose turn it is and to skip/reverse.
+    clearRender(players[turn]);
     turn += move
     if (turn == players.length) {
         turn = 0;
@@ -53,7 +81,8 @@ function incrementTurn() {
         let n = players.length - 1
         turn = n
     } // End else.
-    rendering = true
+    renderHeader();
+    render(players[turn], "hand-el")
 } // End function.
 
 
@@ -144,7 +173,7 @@ function renderTopCard() {
     let cd = document.createElement("p");
     displayCards(cd, topCard.value);
     cd.setAttribute("id", "top-card")
-    cd.classList.add(topCard.color, topCard.value);
+    cd.classList.add(topCard.color, topCard.value, -1);
     cd.ariaHidden = true
     d.appendChild(cd);
     var accessibility = document.createElement("p");
@@ -183,7 +212,8 @@ function chooseColor() {
         } // End else.
 
     }// End while.
-    rendering = true
+
+    renderTopCard()
 } // End function.
 
 function doSomething() {
@@ -191,37 +221,37 @@ function doSomething() {
     let card = discard[n];
     if (card.value == "reverse") {
         move *= -1;
-        incrementTurn();
+        switchTurn();
     }// End if.
     else if (card.value == "wild") {
         chooseColor();
-        incrementTurn();
+        switchTurn();
     } // End else if.
     else if (card.value == "skip") {
         for (let i = 0; i < 2; i++) {
-            incrementTurn();
+            switchTurn();
         } // End for loop.
     } // End else if.
-    else if (card.value = "draw2") {
+    else if (card.value == "draw2") {
         drawCards(d1, players[turn + 1].hand, 2);
         for (let i = 0; i < 2; i++) {
-            incrementTurn();
+            switchTurn();
         } // End for loop.
     } // End else if.
-    else if (card.value = "draw4") {
-        chooseCard();
+    else if (card.value == "draw4") {
+        chooseColor();
         drawCards(d1, players[turn + 1].hand, 4);
         for (let i = 0; i < 2; i++) {
-            incrementTurn();
+            switchTurn();
         } // End for loop.
     } // End else if.
     else {
-        incrementTurn();
+        switchTurn();
     }
 } // End function.
 
 
-function placeCard(toPlace, h) {
+function placeCard(toPlace, player) {
     // Places card and renders hand+discard to reflect change.
     var topEl = document.getElementById("top-card")
     let tc = topEl.className
@@ -229,60 +259,44 @@ function placeCard(toPlace, h) {
     let splitCl = toPlace.split(" ");
     let tcObj = { color: splitTc[0], value: splitTc[1] }
     let clObj = { color: splitCl[0], value: splitCl[1] }
+    let index = splitCl[2]
+
     console.log(tcObj)
     console.log(clObj)
-    if (tcObj.color == clObj.color || tcObj.value == clObj.value || tcObj.color == "black") {
-        console.log(h)
-        let index = -1
-        for (let i = 0, len = h.length; i < len; i++) {
-            if (h[i].color == clObj.color && h[i].value == clObj.value) {
-                index = i;
-                break;
-            } // End if
-        } // End for loop.
-        console.log(index)
-        let card = h.splice(index, 1);
+    if (tcObj.color == clObj.color || tcObj.value == clObj.value || clObj.color == "black") {
+        console.log(player.hand)
+        let card = player.removeCard(index)
         let moving = card.pop()
         discard.push(moving);
+        let tIndex = discard.length - 1
     } // End if.
     else {
         console.log("error.")
     } // end else. 
+    renderTopCard();
 } // end function
 
 
-function render(deck, where) {
+function render(player, where) {
     // Clears old cards and shows new ones.
-    for (let card = 0; card < renderedHand.length; card++) {
-        renderedHand[card].remove();
-    } // End for loop.
-    for (let c = 0; c < deck.length; c++) {
+    clearRender(players[turn]);
+    for (let c = 0; c < player.hand.length; c++) {
         let cd = document.createElement("button");
-        displayCards(cd, deck[c].value)
-        cd.classList.add(deck[c].color, deck[c].value)
-        cd.ariaLabel = deck[c].color + " " + deck[c].value
+        displayCards(cd, player.hand[c].value)
+        cd.classList.add(player.hand[c].color, player.hand[c].value, c)
+        cd.ariaLabel = player.hand[c].color + " " + player.hand[c].value
         cd.onclick = function () {
             let cl = event.target.className;
-            placeCard(cl, players[turn].hand);
+            placeCard(cl, players[turn]);
             doSomething();
-            rendering = true
+            render(player[turn], "hand-el");
         }
         document.getElementById(where).appendChild(cd);
-        renderedHand.push(cd);
+        player.rendered.push(cd);
     } //End for loop
 } // End function
 
 
-function renderHeader() {
-    // Renders header to say whose turn it is.
-    let headerEl = document.getElementById("header-el");
-    let headerInfo = document.getElementById("header-info");
-    headerEl.removeChild(headerInfo);
-    let newHeader = document.createElement("h1");
-    newHeader.innerText = players[turn].name + "'s turn.";
-    newHeader.setAttribute("id", "header-info")
-    headerEl.appendChild(newHeader);
-} // End function
 
 
 
@@ -302,7 +316,7 @@ function setup() {
     dbt.innerText = "+";
     dbt.onclick = function () {
         drawCards(d1, players[turn].hand, 1);
-        render(player[turn].hand, "hand-el");
+        render(players[turn], "hand-el");
     }// End function
 
     dbt.ariaLabel = "Draw card";
@@ -319,7 +333,7 @@ setup();
 rendering = true
 
 do {
-    render(players[turn].hand, "hand-el");
+    render(players[turn], "hand-el");
     renderTopCard();
     renderHeader();
     rendering = false;
