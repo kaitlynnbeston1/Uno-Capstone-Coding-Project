@@ -1,13 +1,7 @@
-
-var colors = ["red", "green", "blue", "yellow"]; //All colors for Uno deck.
-var values = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "skip", "reverse", "draw2"]; // All numerical card values.
-var wilds = ["wild", "draw4"] // Wild card variables for the deck.
-var turn = 0
-var players = []
-var move = 1
-var discard = []
-var d1 = createDeck();
-
+// Title: Uno
+// Name: Kaitlynn Beston
+// Class: CS 30
+// Date: Jun 10, 2023
 
 class Player {
     constructor(name, turnNum) {
@@ -23,10 +17,21 @@ class Player {
     }
     checkWin() {
         if (this.hand.length == 0) {
-            alert(this.name + " won!")
+            winSound.play();
+            alert(this.name + " won!");
         }
     }
 } // End class.
+
+
+var colors = ["red", "green", "blue", "yellow"]; //All colors for Uno deck.
+var values = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "skip", "reverse", "draw2"]; // All numerical card values.
+var wilds = ["wild", "draw4"]; // Wild card variables for the deck.
+var turn = 0;
+var players = [];
+var move = 1;
+var discard = [];
+
 
 
 function setPlayers() {
@@ -40,18 +45,18 @@ function setPlayers() {
             continue;
         }// End else
     } // End while
-    let t = 0
+    let t = 0;
     while (true) {
         let pNum = t + 1;
         let n = prompt("Player" + pNum + ", What is your name?");
         window["p" + pNum] = new Player(n, pNum);
         eval("players.push(" + "p" + pNum + ")");
-        t += 1
+        t += 1;
         if (t == playersNum) {
             break;
         } // End if
     } // End while. 
-    console.log(players)
+    console.log(players);
 } // End function.
 
 
@@ -60,7 +65,7 @@ function clearRender(player) {
     for (let card = 0; card < player.rendered.length; card++) {
         player.rendered[card].remove();
     } // End for loop.
-    player.rendered = []
+    player.rendered = [];
 }
 
 
@@ -71,7 +76,7 @@ function renderHeader() {
     headerEl.removeChild(headerInfo);
     let newHeader = document.createElement("h1");
     newHeader.innerText = players[turn].name + "'s turn.";
-    newHeader.setAttribute("id", "header-info")
+    newHeader.setAttribute("id", "header-info");
     headerEl.appendChild(newHeader);
 } // End function
 
@@ -79,22 +84,22 @@ function renderHeader() {
 function switchTurn() {
     // Increments turn number. Used to manage whose turn it is and to skip/reverse.
     clearRender(players[turn]);
-    turn += move
+    turn += move;
     if (turn == players.length) {
         turn = 0;
     }// End if.
     else if (turn == -1) {
         let n = players.length - 1;
-        turn = n
+        turn = n;
     } // End else.
     renderHeader();
-    render(players[turn], "hand-el")
+    render(players[turn], "hand-el");
 } // End function.
 
 
 function createDeck() {
     // Creating a deck of cards.
-    let deck = new Array();
+    let deck = [];
     for (let item = 0; item < colors.length; item++) {
         for (let v = 0; v < values.length; v++) {
             let card = { color: colors[item], value: values[v] };
@@ -109,12 +114,12 @@ function createDeck() {
     } // End loop 1.
 
     for (let w = 0; w < 4; w++) {
-        let card = { color: "black", value: wilds[0] }
-        deck.push(card)
+        let card = { color: "black", value: wilds[0] };
+        deck.push(card);
     } //End for loop 1
     for (let w = 0; w < 4; w++) {
-        let card = { color: "black", value: wilds[1] }
-        deck.push(card)
+        let card = { color: "black", value: wilds[1] };
+        deck.push(card);
     }
     return deck;
 } // End function.
@@ -123,10 +128,10 @@ function shuffle(deck) {
     // Shuffling the deck 1,500 times.
     for (let item = 0; item < 1500; item++) {
         let location1 = Math.floor((Math.random() * deck.length));
-        let location2 = Math.floor((Math.random() * deck.length))
+        let location2 = Math.floor((Math.random() * deck.length));
         let tmp = deck[location1];
-        deck[location1] = deck[location2]
-        deck[location2] = tmp
+        deck[location1] = deck[location2];
+        deck[location2] = tmp;
     } // End for loop 1.
 } // End function.
 
@@ -139,26 +144,26 @@ function getCard(fromDeck) {
 function drawCards(d, h, n) {
     for (let draw = 0; draw < n; draw++) {
         let card = getCard(d1);
-        h.push(card)
+        h.push(card);
     } // End for loop.
 } // End function.
 
 
 function displayCards(el, what) {
     if (what === "skip") {
-        el.innerText = "X"
+        el.innerText = "X";
     } // End if.
     else if (what === "draw2") {
-        el.innerText = "+2"
+        el.innerText = "+2";
     }// End else if #1
     else if (what === "reverse") {
-        el.innerText = "\u2923"
+        el.innerText = "\u2923";
     } // End else if #2
     else if (what == "wild") {
-        el.innerText = "W"
+        el.innerText = "W";
     } // End else if #3
     else if (what == "draw4") {
-        el.innerText = "+4"
+        el.innerText = "+4";
     }// End else if #4
     else {
         el.innerText = what;
@@ -168,35 +173,35 @@ function displayCards(el, what) {
 
 function renderTopCard() {
     // Shows top card to users.
-    let n = discard.length
-    n -= 1
-    let topCard = discard[n]
-    let d = document.getElementById("tc-div")
-    let tcr = document.getElementById("top-card")
-    let acc = document.getElementById("access")
+    let n = discard.length;
+    n -= 1;
+    let topCard = discard[n];
+    let d = document.getElementById("tc-div");
+    let tcr = document.getElementById("top-card");
+    let acc = document.getElementById("access");
     d.removeChild(tcr);
     d.removeChild(acc);
     let cd = document.createElement("p");
     displayCards(cd, topCard.value);
-    cd.setAttribute("id", "top-card")
+    cd.setAttribute("id", "top-card");
     cd.classList.add(topCard.color, topCard.value);
-    cd.ariaHidden = true
+    cd.ariaHidden = true;
     d.appendChild(cd);
     var accessibility = document.createElement("p");
-    accessibility.innerText = "Top card," + " " + topCard.color + " " + topCard.value
-    accessibility.setAttribute("class", "sr")
-    accessibility.setAttribute("id", "access")
+    accessibility.innerText = "Top card," + " " + topCard.color + " " + topCard.value;
+    accessibility.setAttribute("class", "sr");
+    accessibility.setAttribute("id", "access");
     d.appendChild(accessibility);
 } // End function.
 
 
 function chooseColor() {
     // Chooses the color of a wild card when it is played.
-    var n = discard.length - 1
-    var topCard = discard[n]
-    var selecting = true
+    var n = discard.length - 1;
+    var topCard = discard[n];
+    var selecting = true;
     while (selecting) {
-        let choice = prompt("Choose a color. Blue, green, red, or yellow.")
+        let choice = prompt("Choose a color. Blue, green, red, or yellow.");
         if (choice == "red") {
             topCard.color = "red";
             selecting = false;
@@ -219,7 +224,7 @@ function chooseColor() {
 
     }// End while.
 
-    renderTopCard()
+    renderTopCard();
 } // End function.
 
 function doSomething() {
@@ -250,13 +255,9 @@ function doSomething() {
     } // End else if.
     else if (card.value == "draw4") {
         chooseColor();
-        alert("It's " + players[turn] + "'s turn.")
         switchTurn();
-        alert("It's " + players[turn] + "'s turn.")
         drawCards(d1, players[turn].hand, 4);
-        alert("It's " + players[turn] + "'s turn.")
         switchTurn();
-        alert("It's " + players[turn] + "'s turn.")
     } // End else if.
     else {
         switchTurn();
@@ -266,25 +267,24 @@ function doSomething() {
 
 function placeCard(toPlace, player) {
     // Places card and renders hand+discard to reflect change.
-    var topEl = document.getElementById("top-card")
-    let tc = topEl.className
+    var topEl = document.getElementById("top-card");
+    let tc = topEl.className;
     let splitTc = tc.split(" ");
     let splitCl = toPlace.split(" ");
-    let tcObj = { color: splitTc[0], value: splitTc[1] }
-    let clObj = { color: splitCl[0], value: splitCl[1] }
-    let index = splitCl[2]
+    let tcObj = { color: splitTc[0], value: splitTc[1] };
+    let clObj = { color: splitCl[0], value: splitCl[1] };
+    let index = splitCl[2];
 
-    console.log(tcObj)
-    console.log(clObj)
+    console.log(tcObj);
+    console.log(clObj);
     if (tcObj.color == clObj.color || tcObj.value == clObj.value || clObj.color == "black") {
-        console.log(player.hand)
-        let card = player.removeCard(index)
-        let moving = card.pop()
+        console.log(player.hand);
+        let card = player.removeCard(index);
+        let moving = card.pop();
         discard.push(moving);
-        let tIndex = discard.length - 1
     } // End if.
     else {
-        console.log("error.")
+        console.log("error.");
     } // end else. 
     renderTopCard();
 } // end function
@@ -295,16 +295,16 @@ function render(player, where) {
     clearRender(player);
     for (let c = 0; c < player.hand.length; c++) {
         let cd = document.createElement("button");
-        displayCards(cd, player.hand[c].value)
-        cd.classList.add(player.hand[c].color, player.hand[c].value, c)
-        cd.ariaLabel = player.hand[c].color + " " + player.hand[c].value
+        displayCards(cd, player.hand[c].value);
+        cd.classList.add(player.hand[c].color, player.hand[c].value, c);
+        cd.ariaLabel = player.hand[c].color + " " + player.hand[c].value;
         cd.onclick = function () {
             let cl = event.target.className;
             placeCard(cl, players[turn]);
             players[turn].checkWin();
             doSomething();
             render(player[turn], "hand-el");
-        }
+        };
         document.getElementById(where).appendChild(cd);
         player.rendered.push(cd);
     } //End for loop
@@ -328,8 +328,8 @@ function setup() {
     }// End function
 
     dbt.ariaLabel = "Draw card";
-    dbt.setAttribute("id", "draw-btn")
-    drawDiv.appendChild(dbt)
+    dbt.setAttribute("id", "draw-btn");
+    drawDiv.appendChild(dbt);
 
     // Playing the game.
     // Drawing hand.
@@ -337,15 +337,5 @@ function setup() {
         drawCards(d1, players[i].hand, 7);
     } // End for loop.
 }//end function
+var d1 = createDeck();
 setup();
-rendering = true
-
-do {
-    render(players[turn], "hand-el");
-    renderTopCard();
-    renderHeader();
-    rendering = false;
-    break;
-} // end do
-while (rendering = true);
-
