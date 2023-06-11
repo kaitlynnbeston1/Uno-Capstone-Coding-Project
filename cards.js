@@ -6,6 +6,7 @@ var turn = 0
 var players = []
 var move = 1
 var discard = []
+var d1 = createDeck();
 
 
 class Player {
@@ -19,6 +20,11 @@ class Player {
     removeCard(index) {
         //remove and return a card from hand
         return this.hand.splice(index, 1);
+    }
+    checkWin() {
+        if (this.hand.length == 0) {
+            alert(this.name + " won!")
+        }
     }
 } // End class.
 
@@ -77,8 +83,8 @@ function switchTurn() {
     if (turn == players.length) {
         turn = 0;
     }// End if.
-    else if (turn < 0) {
-        let n = players.length - 1
+    else if (turn == -1) {
+        let n = players.length - 1;
         turn = n
     } // End else.
     renderHeader();
@@ -132,7 +138,7 @@ function getCard(fromDeck) {
 
 function drawCards(d, h, n) {
     for (let draw = 0; draw < n; draw++) {
-        card = getCard(d);
+        let card = getCard(d1);
         h.push(card)
     } // End for loop.
 } // End function.
@@ -173,7 +179,7 @@ function renderTopCard() {
     let cd = document.createElement("p");
     displayCards(cd, topCard.value);
     cd.setAttribute("id", "top-card")
-    cd.classList.add(topCard.color, topCard.value, -1);
+    cd.classList.add(topCard.color, topCard.value);
     cd.ariaHidden = true
     d.appendChild(cd);
     var accessibility = document.createElement("p");
@@ -220,30 +226,37 @@ function doSomething() {
     let n = discard.length - 1;
     let card = discard[n];
     if (card.value == "reverse") {
-        move *= -1;
-        switchTurn();
-    }// End if.
+        if (players.length == 2) {
+            switchTurn();
+            switchTurn();
+        } // End nested if.
+        else {
+            move *= -1;
+            switchTurn();
+        }// End else.
+    } // End original if.
     else if (card.value == "wild") {
         chooseColor();
         switchTurn();
     } // End else if.
     else if (card.value == "skip") {
-        for (let i = 0; i < 2; i++) {
-            switchTurn();
-        } // End for loop.
+        switchTurn();
+        switchTurn();
     } // End else if.
     else if (card.value == "draw2") {
-        drawCards(d1, players[turn + 1].hand, 2);
-        for (let i = 0; i < 2; i++) {
-            switchTurn();
-        } // End for loop.
+        switchTurn();
+        drawCards(d1, players[turn].hand, 2);
+        switchTurn();
     } // End else if.
     else if (card.value == "draw4") {
         chooseColor();
-        drawCards(d1, players[turn + 1].hand, 4);
-        for (let i = 0; i < 2; i++) {
-            switchTurn();
-        } // End for loop.
+        alert("It's " + players[turn] + "'s turn.")
+        switchTurn();
+        alert("It's " + players[turn] + "'s turn.")
+        drawCards(d1, players[turn].hand, 4);
+        alert("It's " + players[turn] + "'s turn.")
+        switchTurn();
+        alert("It's " + players[turn] + "'s turn.")
     } // End else if.
     else {
         switchTurn();
@@ -279,7 +292,7 @@ function placeCard(toPlace, player) {
 
 function render(player, where) {
     // Clears old cards and shows new ones.
-    clearRender(players[turn]);
+    clearRender(player);
     for (let c = 0; c < player.hand.length; c++) {
         let cd = document.createElement("button");
         displayCards(cd, player.hand[c].value)
@@ -288,6 +301,7 @@ function render(player, where) {
         cd.onclick = function () {
             let cl = event.target.className;
             placeCard(cl, players[turn]);
+            players[turn].checkWin();
             doSomething();
             render(player[turn], "hand-el");
         }
@@ -297,15 +311,9 @@ function render(player, where) {
 } // End function
 
 
-
-
-
 function setup() {
     // Setting the players.
     setPlayers();
-
-    // Creating deck.
-    var d1 = createDeck();
     shuffle(d1);
     // Creating and rendering discard.
     drawCards(d1, discard, 1);
@@ -316,7 +324,7 @@ function setup() {
     dbt.innerText = "+";
     dbt.onclick = function () {
         drawCards(d1, players[turn].hand, 1);
-        render(players[turn], "hand-el");
+        switchTurn();
     }// End function
 
     dbt.ariaLabel = "Draw card";

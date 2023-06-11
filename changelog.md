@@ -19,7 +19,12 @@
 - *Added:* Placeholder draw card button. Function to be added.
 
 ## v3.0
-*Changed:* The draw button works now! Yay!
-*Changed:* The cards are now a bit more high contrast for low vision users.
-*Added:* You can now see the top card of the discard pile and read it with a screen reader.
-*Added:* You can now place cards!
+- *Changed:* The draw button works now! Yay!
+- *Changed:* The cards are now a bit more high contrast for low vision users.
+- *Added:* You can now see the top card of the discard pile and read it with a screen reader.
+- *Added:* You can now place cards!
+
+## v4.0
+- *Changed:* Added turns!
+- *added:* You can now draw 2, 4, skip, and reverse without trouble!
+- *Changed:* Made some style refinements. Unified fonts and centered cards.
